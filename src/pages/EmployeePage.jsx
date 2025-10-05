@@ -90,7 +90,11 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setSelectedEmployee(null)
+              setIsModalOpen(true)
+            }
+            }
           >
             Add Employee
           </Button>
