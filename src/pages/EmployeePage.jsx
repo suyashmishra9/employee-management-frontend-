@@ -151,6 +151,7 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
         setIsOpen={setIsDeleteDialogOpen}
         handleConfirmDelete={handleConfirmDelete}
         actionLoading={actionLoading}
+        isDarkMode={isDarkMode}
       />
 
       {/* Error Snackbar */}
