@@ -7,8 +7,6 @@ import {
   Snackbar,
   Alert,
   Paper,
-  IconButton,
-  Divider,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
@@ -49,7 +47,7 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
   return (
     <Box
       sx={{
-        p: { xs: 2, md: 4 },
+        p: { xs: 2, sm: 3, md: 4 },
         minHeight: "100vh",
         maxWidth: 1400,
         mx: "auto",
@@ -60,9 +58,10 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
           justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
+          alignItems: { xs: "flex-start", sm: "center" },
+          gap: 2,
           mb: 4,
         }}
       >
@@ -78,18 +77,28 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
           Employee Management
         </Typography>
 
-        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            flexWrap: "wrap",
+            width: { xs: "100%", sm: "auto" },
+          }}
+        >
           {/* Theme toggle */}
           <Button
             variant="outlined"
             startIcon={isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
             onClick={() => setIsDarkMode(!isDarkMode)}
+            fullWidth={{ xs: true, sm: false }}
             sx={{
               borderRadius: "50px",
               borderColor: isDarkMode ? "#fff" : "#1976d2",
               color: isDarkMode ? "#fff" : "#1976d2",
               "&:hover": {
-                backgroundColor: isDarkMode ? "rgba(255,255,255,0.1)" : "rgba(25,118,210,0.1)",
+                backgroundColor: isDarkMode
+                  ? "rgba(255,255,255,0.1)"
+                  : "rgba(25,118,210,0.1)",
               },
               fontWeight: "bold",
             }}
@@ -105,6 +114,7 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
               setSelectedEmployee(null);
               setIsModalOpen(true);
             }}
+            fullWidth={{ xs: true, sm: false }}
             sx={{
               borderRadius: "50px",
               px: 3,
@@ -142,7 +152,10 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
           p: 2,
           borderRadius: 3,
           backgroundColor: isDarkMode ? "#1d1d1d" : "#fff",
-          boxShadow: isDarkMode ? "0 4px 20px rgba(0,0,0,0.5)" : "0 5px 15px rgba(0,0,0,0.1)",
+          boxShadow: isDarkMode
+            ? "0 4px 20px rgba(0,0,0,0.5)"
+            : "0 5px 15px rgba(0,0,0,0.1)",
+          overflowX: "auto",
         }}
       >
         <EmployeeTable

@@ -56,25 +56,24 @@ const EmployeeTable = ({
       sx={{
         mt: 2,
         borderRadius: 3,
-        overflow: "hidden",
+        overflowX: "auto", // ✅ allows horizontal scroll on mobile
         boxShadow: isDarkMode
           ? "0 5px 15px rgba(0,0,0,0.5)"
           : "0 5px 15px rgba(0,0,0,0.1)",
         backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
       }}
     >
-      <Table>
+      <Table sx={{ minWidth: 650 }}> {/* ✅ minWidth ensures table doesn't shrink too much */}
         <TableHead>
           <TableRow
             sx={{
-              background: isDarkMode ? "#333" : "linear-gradient(90deg, #FF8E53, #FE6B8B)",
+              background: isDarkMode
+                ? "#333"
+                : "linear-gradient(90deg, #FF8E53, #FE6B8B)",
             }}
           >
             {["Name", "Email", "Position", "Actions"].map((col) => (
-              <TableCell
-                key={col}
-                sx={{ color: "#fff", fontWeight: "bold" }}
-              >
+              <TableCell key={col} sx={{ color: "#fff", fontWeight: "bold" }}>
                 {col}
               </TableCell>
             ))}
@@ -85,7 +84,9 @@ const EmployeeTable = ({
             <TableRow
               key={emp._id}
               sx={{
-                backgroundColor: rowBg(index),
+                backgroundColor: index % 2 === 0
+                  ? isDarkMode ? "#2b2b2b" : "#f9f9f9"
+                  : isDarkMode ? "#1f1f1f" : "#fff",
                 "&:hover": {
                   backgroundColor: isDarkMode ? "#3a3a3a" : "#f1f1f1",
                   transform: "scale(1.01)",
@@ -101,7 +102,7 @@ const EmployeeTable = ({
               </TableCell>
               <TableCell sx={{ color: isDarkMode ? "#ccc" : "#000" }}>{emp.email}</TableCell>
               <TableCell sx={{ color: isDarkMode ? "#ccc" : "#000" }}>{emp.position}</TableCell>
-              <TableCell align="center">
+              <TableCell sx={{ whiteSpace: "nowrap" }} align="center"> {/* ✅ prevents wrapping */}
                 <IconButton
                   onClick={() => handleEdit(emp)}
                   sx={{
@@ -135,6 +136,7 @@ const EmployeeTable = ({
         </TableBody>
       </Table>
     </TableContainer>
+
   );
 };
 
