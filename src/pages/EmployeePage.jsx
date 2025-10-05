@@ -8,6 +8,7 @@ import {
   Alert,
   Paper,
   IconButton,
+  Divider,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
@@ -55,14 +56,14 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
         backgroundColor: isDarkMode ? "#121212" : "#f5f5f5",
       }}
     >
-      {/* Header & Theme Toggle */}
+      {/* Header */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
-          mb: 3,
+          mb: 4,
         }}
       >
         <Typography
@@ -78,40 +79,60 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
         </Typography>
 
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+          {/* Theme toggle */}
           <Button
-            variant="contained"
+            variant="outlined"
             startIcon={isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
             onClick={() => setIsDarkMode(!isDarkMode)}
+            sx={{
+              borderRadius: "50px",
+              borderColor: isDarkMode ? "#fff" : "#1976d2",
+              color: isDarkMode ? "#fff" : "#1976d2",
+              "&:hover": {
+                backgroundColor: isDarkMode ? "rgba(255,255,255,0.1)" : "rgba(25,118,210,0.1)",
+              },
+              fontWeight: "bold",
+            }}
           >
             {isDarkMode ? "Light Mode" : "Dark Mode"}
           </Button>
 
+          {/* Add Employee */}
           <Button
             variant="contained"
-            color="primary"
             startIcon={<AddIcon />}
             onClick={() => {
-              setSelectedEmployee(null)
-              setIsModalOpen(true)
-            }
-            }
+              setSelectedEmployee(null);
+              setIsModalOpen(true);
+            }}
+            sx={{
+              borderRadius: "50px",
+              px: 3,
+              py: 1.5,
+              fontWeight: "bold",
+              background: "linear-gradient(90deg, #FE6B8B, #FF8E53)",
+              "&:hover": {
+                background: "linear-gradient(90deg, #FF8E53, #FE6B8B)",
+                transform: "scale(1.03)",
+              },
+            }}
           >
             Add Employee
           </Button>
         </Box>
       </Box>
 
-      {/* Search Bar */}
+      {/* Search */}
       <Paper
         elevation={3}
-        sx={{ p: 2, mb: 3, borderRadius: 3, backgroundColor: isDarkMode ? "#1d1d1d" : "#fff" }}
+        sx={{
+          p: 2,
+          mb: 3,
+          borderRadius: 3,
+          backgroundColor: isDarkMode ? "#1d1d1d" : "#fff",
+        }}
       >
-        <SearchBar
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          isDarkMode={isDarkMode}
-        />
-
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} isDarkMode={isDarkMode} />
       </Paper>
 
       {/* Employee Table */}
@@ -121,6 +142,7 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
           p: 2,
           borderRadius: 3,
           backgroundColor: isDarkMode ? "#1d1d1d" : "#fff",
+          boxShadow: isDarkMode ? "0 4px 20px rgba(0,0,0,0.5)" : "0 5px 15px rgba(0,0,0,0.1)",
         }}
       >
         <EmployeeTable
@@ -130,7 +152,6 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
           handleDelete={handleDelete}
           isDarkMode={isDarkMode}
         />
-
       </Paper>
 
       {/* Add/Edit Modal */}
@@ -143,7 +164,6 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
         actionLoading={actionLoading}
         isDarkMode={isDarkMode}
       />
-
 
       {/* Delete Confirmation */}
       <DeleteConfirmDialog
