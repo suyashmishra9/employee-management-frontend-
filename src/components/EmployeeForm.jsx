@@ -9,6 +9,11 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
+import {
+  validateName,
+  validateEmail,
+  validatePosition,
+} from "../utils/validation";
 
 const modalStyle = {
   position: "absolute",
@@ -59,43 +64,48 @@ const EmployeeForm = ({
   };
 
   return (
-    <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+    <Modal
+      open={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
+      aria-labelledby="employee-form-modal"
+    >
       <Box sx={modalStyle}>
-        <Typography variant="h6" mb={2}>
+        <Typography variant="h6" mb={2} id="employee-form-modal">
           {selectedEmployee ? "Edit Employee" : "Add Employee"}
         </Typography>
+
         <form onSubmit={handleSubmit(onSubmit)}>
+          {/* Name Field */}
           <TextField
             fullWidth
             label="Name"
             margin="normal"
-            {...register("name", { required: "Name is required" })}
+            {...register("name", { validate: validateName })}
             error={!!errors.name}
             helperText={errors.name?.message}
           />
+
+          {/* Email Field */}
           <TextField
             fullWidth
             label="Email"
             margin="normal"
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value:
-                  /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                message: "Invalid email address",
-              },
-            })}
+            {...register("email", { validate: validateEmail })}
             error={!!errors.email}
             helperText={errors.email?.message}
           />
+
+          {/* Position Field */}
           <TextField
             fullWidth
             label="Position"
             margin="normal"
-            {...register("position", { required: "Position is required" })}
+            {...register("position", { validate: validatePosition })}
             error={!!errors.position}
             helperText={errors.position?.message}
           />
+
+          {/* Submit Button */}
           <Button
             type="submit"
             variant="contained"

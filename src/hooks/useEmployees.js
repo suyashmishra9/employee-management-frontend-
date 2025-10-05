@@ -1,3 +1,4 @@
+// src/hooks/useEmployees.js
 import { useState, useEffect } from "react";
 import {
   getEmployees,
@@ -8,10 +9,8 @@ import {
 
 const useEmployees = () => {
   const [employees, setEmployees] = useState([]);
-
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false); // for add/edit/delete
-
   const [error, setError] = useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,12 +21,13 @@ const useEmployees = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Fetch all employees
   const fetchEmployees = async () => {
     setLoading(true);
     setError(null);
     try {
       const data = await getEmployees();
-      setEmployees(data);
+      setEmployees(data || []);
     } catch (err) {
       setError("Failed to fetch employees");
     } finally {
@@ -35,28 +35,30 @@ const useEmployees = () => {
     }
   };
 
+  // Add employee
   const addEmployee = async (employeeData) => {
     setActionLoading(true);
     setError(null);
     try {
-      const newEmployee = await createEmployee(employeeData);
-      setEmployees((prev) => [...prev, newEmployee]);
+      await createEmployee(employeeData);
+      await fetchEmployees(); // ✅ refetch all employees after adding
       setIsModalOpen(false);
     } catch (err) {
-      setError("Failed to create employee");
+      setError(err.response?.data?.error || "Failed to create employee");
+
     } finally {
       setActionLoading(false);
     }
   };
 
+
+  // Edit employee
   const editEmployee = async (id, employeeData) => {
     setActionLoading(true);
     setError(null);
     try {
-      const updated = await updateEmployee(id, employeeData);
-      setEmployees((prev) =>
-        prev.map((emp) => (emp._id === id ? updated : emp))
-      );
+      await updateEmployee(id, employeeData);
+      await fetchEmployees(); // ✅ refetch all employees after edit
       setSelectedEmployee(null);
       setIsModalOpen(false);
     } catch (err) {
@@ -66,6 +68,9 @@ const useEmployees = () => {
     }
   };
 
+
+
+  // Delete employee
   const removeEmployee = async (id) => {
     setActionLoading(true);
     setError(null);
@@ -81,19 +86,24 @@ const useEmployees = () => {
     }
   };
 
-  const filteredEmployees = employees.filter((emp) =>
-    emp.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  // Handle edit button click
   const handleEdit = (employee) => {
     setSelectedEmployee(employee);
     setIsModalOpen(true);
   };
 
+  // Handle delete button click
   const handleDelete = (id) => {
     setDeleteId(id);
     setIsDeleteDialogOpen(true);
   };
+
+  // Safe filtered employees for search
+  const filteredEmployees = employees.filter((emp) => {
+    const name = emp.name || "";
+    const term = searchTerm || "";
+    return name.toLowerCase().includes(term.toLowerCase());
+  });
 
   useEffect(() => {
     fetchEmployees();
@@ -104,6 +114,7 @@ const useEmployees = () => {
     loading,
     actionLoading,
     error,
+    setError,
     isModalOpen,
     setIsModalOpen,
     selectedEmployee,
