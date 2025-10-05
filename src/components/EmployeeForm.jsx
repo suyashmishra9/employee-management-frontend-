@@ -15,18 +15,6 @@ import {
   validatePosition,
 } from "../utils/validation";
 
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: { xs: "90%", sm: 400 },
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 2,
-};
-
 const EmployeeForm = ({
   isModalOpen,
   setIsModalOpen,
@@ -68,9 +56,35 @@ const EmployeeForm = ({
       open={isModalOpen}
       onClose={() => setIsModalOpen(false)}
       aria-labelledby="employee-form-modal"
+      closeAfterTransition
+      sx={{ backdropFilter: "blur(4px)" }}
     >
-      <Box sx={modalStyle}>
-        <Typography variant="h6" mb={2} id="employee-form-modal">
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: { xs: "90%", sm: 400 },
+          bgcolor: "background.paper",
+          boxShadow: 24,
+          p: 4,
+          borderRadius: 3,
+          transition: "all 0.3s ease-in-out",
+        }}
+      >
+        <Typography
+          variant="h5"
+          mb={3}
+          id="employee-form-modal"
+          sx={{
+            fontWeight: "bold",
+            background: "linear-gradient(90deg, #FF8E53, #FE6B8B)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            textAlign: "center",
+          }}
+        >
           {selectedEmployee ? "Edit Employee" : "Add Employee"}
         </Typography>
 
@@ -83,6 +97,17 @@ const EmployeeForm = ({
             {...register("name", { validate: validateName })}
             error={!!errors.name}
             helperText={errors.name?.message}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "50px",
+                backgroundColor: "#f0f0f0",
+                "&:hover": { backgroundColor: "#e0e0e0" },
+                "&.Mui-focused": {
+                  backgroundColor: "#fff",
+                  boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+                },
+              },
+            }}
           />
 
           {/* Email Field */}
@@ -93,6 +118,17 @@ const EmployeeForm = ({
             {...register("email", { validate: validateEmail })}
             error={!!errors.email}
             helperText={errors.email?.message}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "50px",
+                backgroundColor: "#f0f0f0",
+                "&:hover": { backgroundColor: "#e0e0e0" },
+                "&.Mui-focused": {
+                  backgroundColor: "#fff",
+                  boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+                },
+              },
+            }}
           />
 
           {/* Position Field */}
@@ -103,6 +139,17 @@ const EmployeeForm = ({
             {...register("position", { validate: validatePosition })}
             error={!!errors.position}
             helperText={errors.position?.message}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "50px",
+                backgroundColor: "#f0f0f0",
+                "&:hover": { backgroundColor: "#e0e0e0" },
+                "&.Mui-focused": {
+                  backgroundColor: "#fff",
+                  boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+                },
+              },
+            }}
           />
 
           {/* Submit Button */}
@@ -110,7 +157,17 @@ const EmployeeForm = ({
             type="submit"
             variant="contained"
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 3,
+              py: 1.5,
+              borderRadius: "50px",
+              background: "linear-gradient(90deg, #FE6B8B, #FF8E53)",
+              "&:hover": {
+                background: "linear-gradient(90deg, #FF8E53, #FE6B8B)",
+                transform: "scale(1.03)",
+              },
+              fontWeight: "bold",
+            }}
             disabled={actionLoading}
           >
             {actionLoading ? <CircularProgress size={24} /> : "Save"}

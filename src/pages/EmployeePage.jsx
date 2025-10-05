@@ -1,12 +1,17 @@
 // src/pages/EmployeePage.jsx
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Button,
   Typography,
   Snackbar,
   Alert,
+  Paper,
+  IconButton,
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 import EmployeeTable from "../components/EmployeeTable";
 import EmployeeForm from "../components/EmployeeForm";
 import SearchBar from "../components/SearchBar";
@@ -36,7 +41,6 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
     handleDelete,
   } = useEmployees();
 
-  // Confirm delete handler
   const handleConfirmDelete = () => {
     if (deleteId) removeEmployee(deleteId);
   };
@@ -46,8 +50,9 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
       sx={{
         p: { xs: 2, md: 4 },
         minHeight: "100vh",
-        maxWidth: 1200,
+        maxWidth: 1400,
         mx: "auto",
+        backgroundColor: isDarkMode ? "#121212" : "#f5f5f5",
       }}
     >
       {/* Header & Theme Toggle */}
@@ -57,22 +62,34 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
+          mb: 3,
         }}
       >
-        <Typography variant="h4" mb={{ xs: 2, md: 0 }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+            background: "linear-gradient(45deg, #FE6B8B, #FF8E53)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
           Employee Management
         </Typography>
-        <Box>
+
+        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
           <Button
             variant="contained"
+            startIcon={isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
             onClick={() => setIsDarkMode(!isDarkMode)}
-            sx={{ mr: 2, mb: { xs: 1, md: 0 } }}
           >
             {isDarkMode ? "Light Mode" : "Dark Mode"}
           </Button>
+
           <Button
             variant="contained"
             color="primary"
+            startIcon={<AddIcon />}
             onClick={() => setIsModalOpen(true)}
           >
             Add Employee
@@ -81,15 +98,36 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
       </Box>
 
       {/* Search Bar */}
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Paper
+        elevation={3}
+        sx={{ p: 2, mb: 3, borderRadius: 3, backgroundColor: isDarkMode ? "#1d1d1d" : "#fff" }}
+      >
+        <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          isDarkMode={isDarkMode}
+        />
+
+      </Paper>
 
       {/* Employee Table */}
-      <EmployeeTable
-        employees={employees}
-        loading={loading}
-        handleEdit={handleEdit}
-        handleDelete={handleDelete}
-      />
+      <Paper
+        elevation={3}
+        sx={{
+          p: 2,
+          borderRadius: 3,
+          backgroundColor: isDarkMode ? "#1d1d1d" : "#fff",
+        }}
+      >
+        <EmployeeTable
+          employees={employees}
+          loading={loading}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+          isDarkMode={isDarkMode}
+        />
+
+      </Paper>
 
       {/* Add/Edit Modal */}
       <EmployeeForm
