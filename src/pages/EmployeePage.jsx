@@ -137,7 +137,9 @@ const EmployeePage = ({ isDarkMode, setIsDarkMode }) => {
         addEmployee={addEmployee}
         editEmployee={editEmployee}
         actionLoading={actionLoading}
+        isDarkMode={isDarkMode}
       />
+
 
       {/* Delete Confirmation */}
       <DeleteConfirmDialog

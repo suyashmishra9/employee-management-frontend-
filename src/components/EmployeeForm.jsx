@@ -1,19 +1,8 @@
 // src/components/EmployeeForm.jsx
 import React, { useEffect } from "react";
-import {
-  Modal,
-  Box,
-  Typography,
-  TextField,
-  Button,
-  CircularProgress,
-} from "@mui/material";
+import { Modal, Box, Typography, TextField, Button, CircularProgress } from "@mui/material";
 import { useForm } from "react-hook-form";
-import {
-  validateName,
-  validateEmail,
-  validatePosition,
-} from "../utils/validation";
+import { validateName, validateEmail, validatePosition } from "../utils/validation";
 
 const EmployeeForm = ({
   isModalOpen,
@@ -22,15 +11,10 @@ const EmployeeForm = ({
   addEmployee,
   editEmployee,
   actionLoading,
+  isDarkMode,
 }) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  // Populate form if editing
   useEffect(() => {
     if (selectedEmployee) {
       reset({
@@ -44,12 +28,13 @@ const EmployeeForm = ({
   }, [selectedEmployee, reset]);
 
   const onSubmit = (data) => {
-    if (selectedEmployee) {
-      editEmployee(selectedEmployee._id, data);
-    } else {
-      addEmployee(data);
-    }
+    if (selectedEmployee) editEmployee(selectedEmployee._id, data);
+    else addEmployee(data);
   };
+
+  const fieldBg = isDarkMode ? "#2a2a2a" : "#f0f0f0";
+  const fieldHover = isDarkMode ? "#3a3a3a" : "#e0e0e0";
+  const fieldText = isDarkMode ? "#fff" : "#000";
 
   return (
     <Modal
@@ -66,7 +51,7 @@ const EmployeeForm = ({
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: { xs: "90%", sm: 400 },
-          bgcolor: "background.paper",
+          bgcolor: isDarkMode ? "#1f1f1f" : "background.paper",
           boxShadow: 24,
           p: 4,
           borderRadius: 3,
@@ -89,70 +74,43 @@ const EmployeeForm = ({
         </Typography>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Name Field */}
-          <TextField
-            fullWidth
-            label="Name"
-            margin="normal"
-            {...register("name", { validate: validateName })}
-            error={!!errors.name}
-            helperText={errors.name?.message}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "50px",
-                backgroundColor: "#f0f0f0",
-                "&:hover": { backgroundColor: "#e0e0e0" },
-                "&.Mui-focused": {
-                  backgroundColor: "#fff",
-                  boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+          {["name", "email", "position"].map((field) => (
+            <TextField
+              key={field}
+              fullWidth
+              label={field.charAt(0).toUpperCase() + field.slice(1)}
+              margin="normal"
+              {...register(field, {
+                validate:
+                  field === "name"
+                    ? validateName
+                    : field === "email"
+                    ? validateEmail
+                    : validatePosition,
+              })}
+              error={!!errors[field]}
+              helperText={errors[field]?.message}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "50px",
+                  backgroundColor: fieldBg,
+                  color: fieldText,
+                  "&:hover": { backgroundColor: fieldHover },
+                  "&.Mui-focused": {
+                    backgroundColor: isDarkMode ? "#252525" : "#fff",
+                    boxShadow: isDarkMode
+                      ? "0 0 10px rgba(255,255,255,0.1)"
+                      : "0 0 10px rgba(0,0,0,0.1)",
+                  },
+                  input: { color: fieldText },
                 },
-              },
-            }}
-          />
-
-          {/* Email Field */}
-          <TextField
-            fullWidth
-            label="Email"
-            margin="normal"
-            {...register("email", { validate: validateEmail })}
-            error={!!errors.email}
-            helperText={errors.email?.message}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "50px",
-                backgroundColor: "#f0f0f0",
-                "&:hover": { backgroundColor: "#e0e0e0" },
-                "&.Mui-focused": {
-                  backgroundColor: "#fff",
-                  boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+                "& .MuiFormHelperText-root": {
+                  color: isDarkMode ? "#ff6b6b" : "#d32f2f",
                 },
-              },
-            }}
-          />
+              }}
+            />
+          ))}
 
-          {/* Position Field */}
-          <TextField
-            fullWidth
-            label="Position"
-            margin="normal"
-            {...register("position", { validate: validatePosition })}
-            error={!!errors.position}
-            helperText={errors.position?.message}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "50px",
-                backgroundColor: "#f0f0f0",
-                "&:hover": { backgroundColor: "#e0e0e0" },
-                "&.Mui-focused": {
-                  backgroundColor: "#fff",
-                  boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-                },
-              },
-            }}
-          />
-
-          {/* Submit Button */}
           <Button
             type="submit"
             variant="contained"
